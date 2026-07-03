@@ -1,0 +1,18 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# Environment
+.env
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

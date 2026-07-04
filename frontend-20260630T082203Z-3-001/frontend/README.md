@@ -1,70 +1,198 @@
-# Getting Started with Create React App
+# VectorShift Technical Assessment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This project is my solution for the VectorShift Frontend/Backend Technical Assessment.
 
-In the project directory, you can run:
+The application allows users to build a pipeline by dragging and connecting nodes in a visual editor. 
+The frontend is built with React and React Flow, while the backend is implemented with FastAPI.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Part 1 – Node Abstraction
 
-### `npm test`
+Implemented a reusable `BaseNode` component to eliminate duplicated code between node types.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Refactored the existing nodes:
 
-### `npm run build`
+- Input Node
+- Output Node
+- LLM Node
+- Text Node
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Added five additional custom nodes to demonstrate the flexibility of the abstraction:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- API Node
+- Database Node
+- Email Node
+- Filter Node
+- Math Node
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+### Part 2 – Styling
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Implemented a unified design across all nodes using the shared `BaseNode` component.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Features include:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Consistent layout
+- Shared styling
+- Reusable handles
+- Uniform spacing
+- Rounded borders
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+### Part 3 – Text Node Logic
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Enhanced the Text node with additional functionality:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Dynamic node width based on text length
+- Detection of variables written as:
 
-### Code Splitting
+```text
+{{variable}}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Automatic creation of input handles for each detected variable
 
-### Analyzing the Bundle Size
+Example:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```text
+Translate {{language}}
 
-### Making a Progressive Web App
+Output: {{result}}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+creates two input handles:
 
-### Advanced Configuration
+- language
+- result
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+### Part 4 – Backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Implemented a FastAPI endpoint that receives the pipeline and returns:
 
-### `npm run build` fails to minify
+- Number of nodes
+- Number of edges
+- Whether the pipeline is a Directed Acyclic Graph (DAG)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Graph validation is performed using the **NetworkX** library.
+
+Example response:
+
+```json
+{
+  "num_nodes": 8,
+  "num_edges": 5,
+  "is_dag": true
+}
+```
+
+---
+
+## Technologies
+
+### Frontend
+
+- React
+- React Flow
+- Zustand
+
+### Backend
+
+- FastAPI
+- NetworkX
+- Uvicorn
+
+---
+
+## Running the Project
+
+### Backend
+
+```bash
+cd backend
+
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+pip install fastapi uvicorn networkx
+
+uvicorn main:app --reload
+```
+
+Backend runs on:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+### Frontend
+
+```bash
+cd frontend
+
+npm install
+
+npm start
+```
+
+Frontend runs on:
+
+```
+http://localhost:3000
+```
+
+---
+
+## Usage
+
+1. Start both the frontend and backend.
+2. Drag nodes from the toolbar onto the canvas.
+3. Connect nodes together.
+4. Click **Submit**.
+5. The backend returns:
+   - Number of nodes
+   - Number of edges
+   - DAG validation result.
+
+---
+
+## Project Structure
+
+```text
+frontend/
+├── src/
+│   ├── components/
+│   │   └── BaseNode.js
+│   ├── nodes/
+│   ├── store.js
+│   ├── submit.js
+│   └── ui.js
+
+backend/
+└── main.py
+```
+
+---
+
+## Future Improvements
+
+- Save and load pipelines.
+- Add undo and redo functionality.
+- Improve automatic Text node resizing.
+- Validate node connections before submission.
+- Support automatic graph layout for large pipelines.
+- Add unit and integration tests.
+
+---

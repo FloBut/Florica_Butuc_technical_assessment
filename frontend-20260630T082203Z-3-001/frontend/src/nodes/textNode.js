@@ -1,25 +1,27 @@
+//textNode.js
+
 import { useState, useRef, useEffect } from 'react';
 import BaseNode from '../components/BaseNode';
 
 export const TextNode = ({ id, data }) => {
   const [currText, setCurrText] = useState(data?.text || '{{input}}');
+  const [textAreaHeight, setTextAreaHeight] = useState(96);
   const textareaRef = useRef(null);
 
   const handleTextChange = (e) => {
     setCurrText(e.target.value);
   };
-
   useEffect(() => {
     const textarea = textareaRef.current;
 
     if (!textarea) return;
 
-    textarea.style.height = '0px';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    console.log("scrollHeight:", textarea.scrollHeight);
-  }, [currText]);
+    textarea.style.height = 'auto';
 
-  const [textAreaHeight, setTextAreaHeight] = useState(96);
+    const newHeight = textarea.scrollHeight;
+
+    setTextAreaHeight(newHeight);
+  }, [currText]);
 
   // Determine the longest line for dynamic width
   const longestLine = Math.max(
@@ -37,6 +39,8 @@ export const TextNode = ({ id, data }) => {
     120,
     textAreaHeight + 60
   );
+  console.log("textAreaHeight:", textAreaHeight);
+  console.log("nodeHeight:", height);
 
   // Find all variables in {{variable}} format
   const variables = [
@@ -77,6 +81,12 @@ export const TextNode = ({ id, data }) => {
             resize: 'none',
             overflow: 'hidden',
             boxSizing: 'border-box',
+
+            lineHeight: '24px',
+            fontSize: '16px',
+            padding: '8px',
+
+            height: `${textAreaHeight}px`,
           }}
         />
       </label>

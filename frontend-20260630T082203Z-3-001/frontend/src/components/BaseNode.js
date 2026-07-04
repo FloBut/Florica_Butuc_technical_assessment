@@ -1,9 +1,4 @@
-// Render the container
-// Render the title
-// Render the children
-// Render input handles
-// Render output handles
-// Apply common styling
+// BaseNode.js
 
 import { Handle, Position } from 'reactflow';
 

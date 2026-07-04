@@ -5,63 +5,61 @@
 // Render output handles
 // Apply common styling
 
-
 import { Handle, Position } from 'reactflow';
 
 const BaseNode = ({
-    title,
-    children,
-    inputs = [],
-    outputs = [],
-    width = 200,
-    height = 80,
+  title,
+  children,
+  inputs = [],
+  outputs = [],
+  width = 200,
+  height = 80,
 }) => {
-    return (
-        <div
-            style={{
-                width,
-                minHeight: height,
-                border: '1px solid black',
-                padding: 10,
-                borderRadius: 5,
-                backgroundColor: 'white',
-            }}
-        >
-            <div>
-                {
-                    inputs.map((input) => (
-                        <Handle
-                            type="target"
-                            position={Position.Left}
-                            key={input.id}
-                            id={input.id}
-                            style={{top: input.top}}
+  return (
+    <div
+      style={{
+        width,
+        minHeight: height,
+        border: '1px solid black',
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: 'white',
+        position: 'relative',
+      }}
+    >
+      {/* Input Handles */}
+      {inputs.map((input) => (
+        <Handle
+          key={input.id}
+          type="target"
+          position={Position.Left}
+          id={input.id}
+          style={{
+            top: input.top,
+          }}
+        />
+      ))}
 
+      {/* Output Handles */}
+      {outputs.map((output, index) => (
+        <Handle
+          key={output.id}
+          type="source"
+          position={Position.Right}
+          id={output.id}
+          style={{
+            top: output.top || '50%',
+          }}
+        />
+      ))}
 
+      <strong>{title}</strong>
 
-
-                        />
-                    ))
-                }
-                {
-                    outputs.map((output) => (
-                        <Handle
-                            type="source"
-                            position={Position.Right}
-                            key={output.id}
-                            id={output.id}
-
-                        />
-                    ))
-                }
-
-                <strong>{title}</strong>
-            </div>
-
-            <div>
-                {children}
-            </div>
-        </div>
-    );
+      <div style={{ marginTop: 10 }}>
+        {children}
+      </div>
+    </div>
+  );
 };
+
 export default BaseNode;
